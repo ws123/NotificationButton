@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 
-version = "1.0.0"                                //项目版本号
+version = "1.0.2"                                //项目版本号
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
@@ -31,14 +31,14 @@ ext {
 
     publishedGroupId = 'com.carlos.notificatoinbutton'                //GroupId,这个要别人引用的时候会用到，
     libraryName = 'notificationButtonLibrary'                         //这个是项目名字
-    artifact = 'library'                                   //artifactId，这个也是别人引用的时候，会用到
+    artifact = 'buttonlibrary'                                   //artifactId，这个也是别人引用的时候，会用到
 
     libraryDescription = '一个可以显示红点通知的Button控件'       //项目描述
 
-    siteUrl = 'https://github.com/ws123/VoiceLine'          //把项目分享到github后的项目地址
-    gitUrl = 'https://github.com/ws123/VoiceLine.git'       //分享后的项目git地址
+    siteUrl = 'https://github.com/ws123/NotificationButton'          //把项目分享到github后的项目地址
+    gitUrl = 'https://github.com/ws123/NotificationButton.git'       //分享后的项目git地址
 
-    libraryVersion = '1.0.0'                               //library版本
+    libraryVersion = '1.0.2'                               //library版本
 
     developerId = 'carlos'                             //这个开发者id，自己写
     developerName = 'carlos'                           //这个是开发者名字

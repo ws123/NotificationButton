@@ -84,7 +84,7 @@ public class NotificationButton extends Button {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        this.setBackgroundColor(Color.GREEN);
+        this.setBackgroundColor(Color.alpha(0));
         super.onDraw(canvas);
         canvas.save();
         canvas.scale((getWidth() - circleSize / 2) / (float) getWidth(), (getHeight() - circleSize / 2) / (float) getHeight(), getWidth() - circleSize * 2 / 3, getHeight());
@@ -134,7 +134,6 @@ public class NotificationButton extends Button {
 
     /**
      * set count of notification
-     * if notificationNumber<=0,circle disappear
      *
      * @param notificationNumber the count of notification
      */
