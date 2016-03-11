@@ -13,139 +13,77 @@ import android.widget.Button;
  * Created by Administrator on 2016/2/20.
  */
 public class NotificationButton extends Button {
-
-    private int circleBgColor = Color.RED;
-    private int numberColor = Color.WHITE;
-    private float circleSize = 60;
-    private float numberSize = 40;
+    private int notificationNumber;
+    private float redCircleSize = 20;
     private Paint paint;
-    private int notificationNumber = 0;
-    private RectF rectFSmall, rectFMiddle, rectFBig;
-
-    private Button button;
-
+    private RectF rectF;
+    private boolean isChange;
+    private int textColor, circleColor;
 
     public NotificationButton(Context context) {
         super(context);
         paint = new Paint();
         paint.setAntiAlias(true);
-        button = new Button(context);
     }
 
     public NotificationButton(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context, attrs);
-        button = new Button(context, attrs);
+        initProperty(context, attrs);
     }
 
     public NotificationButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context, attrs);
-        button = new Button(context, attrs, defStyleAttr);
+        initProperty(context, attrs);
     }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-    }
-
-    private void init(Context context, AttributeSet attrs) {
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.notButton);
-        circleBgColor = typedArray.getColor(R.styleable.notButton_circleBgColor, Color.RED);
-        numberColor = typedArray.getColor(R.styleable.notButton_numberColor, Color.WHITE);
-        circleSize = typedArray.getFloat(R.styleable.notButton_circleSize, 60);
-        numberSize = typedArray.getFloat(R.styleable.notButton_numberSize, 40);
-        typedArray.recycle();
+    private void initProperty(Context context, AttributeSet attributeSet) {
+        TypedArray typedArray = context.obtainStyledAttributes(attributeSet, R.styleable.notButton);
+        redCircleSize = typedArray.getDimension(R.styleable.notButton_circleSize, 20);
+        circleColor = typedArray.getColor(R.styleable.notButton_circleBgColor, Color.RED);
+        textColor = typedArray.getColor(R.styleable.notButton_textColor, Color.WHITE);
         paint = new Paint();
         paint.setAntiAlias(true);
-        if (getWidth() != 0) {
-            if (notificationNumber > 0 && notificationNumber < 10 && rectFSmall == null) {
-                rectFSmall = new RectF(getWidth() - circleSize, getY() - circleSize / 2, getWidth(), getY() + circleSize / 2);
-            } else if (notificationNumber > 9 && notificationNumber < 100 && rectFMiddle == null) {
-                rectFMiddle = new RectF(getWidth() - circleSize - circleSize / 2, getY() - circleSize / 2, getWidth(), getY() + circleSize / 2);
-            } else if (notificationNumber > 100 && rectFBig == null) {
-                rectFBig = new RectF(getWidth() - circleSize * 2, getY() - circleSize / 2, getWidth(), getY() + circleSize / 2);
+        typedArray.recycle();
+    }
+
+    @Override
+    public void draw(Canvas canvas) {
+        canvas.save();
+        canvas.scale((getWidth() - redCircleSize) / (float) getWidth(), (getHeight() - redCircleSize) / (float) getHeight());
+        canvas.translate(0, redCircleSize);
+        super.draw(canvas);
+        canvas.restore();
+        drawRedCircle(canvas);
+    }
+
+    private void drawRedCircle(Canvas canvas) {
+        paint.setColor(circleColor);
+        if (rectF == null || isChange) {
+            if (notificationNumber < 10) {
+                rectF = new RectF(getWidth() - redCircleSize * 2, 0, getWidth(), redCircleSize * 2);
+            } else if (notificationNumber < 100) {
+                rectF = new RectF(getWidth() - redCircleSize * 3, 0, getWidth(), redCircleSize * 2);
+            } else {
+                rectF = new RectF(getWidth() - redCircleSize * 4, 0, getWidth(), redCircleSize * 2);
             }
         }
-    }
-
-    @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        super.onLayout(changed, left, top, right, bottom);
-        button.layout(left, top, (int) (right - circleSize / 2), bottom);
-        if (notificationNumber > 0 && notificationNumber < 10 && rectFSmall == null) {
-            rectFSmall = new RectF(getWidth() - circleSize, getY() - circleSize / 2, getWidth(), getY() + circleSize / 2);
-        } else if (notificationNumber > 9 && notificationNumber < 100 && rectFMiddle == null) {
-            rectFMiddle = new RectF(getWidth() - circleSize - circleSize / 2, getY() - circleSize / 2, getWidth(), getY() + circleSize / 2);
-        } else if (notificationNumber > 100 && rectFBig == null) {
-            rectFBig = new RectF(getWidth() - circleSize * 2, getY() - circleSize / 2, getWidth(), getY() + circleSize / 2);
-        }
-    }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        this.setBackgroundColor(Color.alpha(0));
-        super.onDraw(canvas);
-        canvas.save();
-        canvas.scale((getWidth() - circleSize / 2) / (float) getWidth(), (getHeight() - circleSize / 2) / (float) getHeight(), getWidth() - circleSize * 2 / 3, getHeight());
-        button.draw(canvas);
-        canvas.restore();
-        if (notificationNumber <= 0) {
-            return;
-        }
-        if (notificationNumber > 0 && notificationNumber < 10) {
-            drawCircleNumber(rectFSmall, canvas, "" + notificationNumber);
-        } else if (notificationNumber > 9 && notificationNumber < 100) {
-            drawCircleNumber(rectFMiddle, canvas, "" + notificationNumber);
-        } else if (notificationNumber > 100) {
-            drawCircleNumber(rectFBig, canvas, "99+");
-        }
-    }
-
-    private void drawCircleNumber(RectF rectF, Canvas canvas, String text) {
-        if (rectF == null) return;
-        paint.setColor(circleBgColor);
-        canvas.drawRoundRect(rectF, circleSize, circleSize, paint);
-        paint.setColor(numberColor);
-        paint.setTextSize(numberSize);
+        canvas.drawRoundRect(rectF, redCircleSize * 2, redCircleSize * 2, paint);
+        paint.setColor(textColor);
+        paint.setTextSize(redCircleSize * 3 / 2);
         paint.setTextAlign(Paint.Align.CENTER);
         Paint.FontMetricsInt fontMetrics = paint.getFontMetricsInt();
         int baseline = (int) ((rectF.bottom + rectF.top - fontMetrics.bottom - fontMetrics.top) / 2);
-        canvas.drawText(text, getWidth() - rectF.width() / 2 + 1, baseline - 2, paint);
-    }
-
-    /**
-     * set circle bg color
-     *
-     * @param circleBgColor the color value of circleBg
-     */
-    public void setCircleBgColor(int circleBgColor) {
-        this.circleBgColor = circleBgColor;
-    }
-
-    /**
-     * set number color
-     *
-     * @param numberColor the color value of number
-     */
-    public void setNumberColor(int numberColor) {
-        this.numberColor = numberColor;
-    }
-
-    /**
-     * set count of notification
-     *
-     * @param notificationNumber the count of notification
-     */
-    public void setNotificationNumber(int notificationNumber) {
-        this.notificationNumber = notificationNumber;
-        if (notificationNumber > 0 && notificationNumber < 10 && rectFSmall == null && getWidth() != 0) {
-            rectFSmall = new RectF(getWidth() - circleSize, getY() - circleSize / 2, getWidth(), getY() + circleSize / 2);
-        } else if (notificationNumber > 9 && notificationNumber < 100 && rectFMiddle == null && getWidth() != 0) {
-            rectFMiddle = new RectF(getWidth() - circleSize - circleSize / 2, getY() - circleSize / 2, getWidth(), getY() + circleSize / 2);
-        } else if (notificationNumber > 100 && rectFBig == null && getWidth() != 0) {
-            rectFBig = new RectF(getWidth() - circleSize * 2, getY() - circleSize / 2, getWidth(), getY() + circleSize / 2);
+        if (notificationNumber < 100) {
+            canvas.drawText(String.valueOf(notificationNumber), getWidth() - rectF.width() / 2 + 1, baseline - 2, paint);
+        } else {
+            canvas.drawText("99+", getWidth() - rectF.width() / 2 + 1, baseline - 2, paint);
         }
-        invalidate();
+    }
+
+    public void setNotificationNumber(int notificationNumber) {
+        if (notificationNumber != this.notificationNumber) {
+            isChange = true;
+        }
+        this.notificationNumber = notificationNumber;
     }
 }

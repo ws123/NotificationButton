@@ -2,8 +2,7 @@
 <resources>
     <declare-styleable name="notButton">
         <attr name="circleBgColor" format="color" />
-        <attr name="numberColor" format="color" />
+        <attr name="textColor" format="color" />
         <attr name="circleSize" format="dimension" />
-        <attr name="numberSize" format="dimension" />
     </declare-styleable>
 </resources>

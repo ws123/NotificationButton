@@ -13,25 +13,14 @@ import android.widget.Button;
 import com.carlos.notificatoinbutton.library.NotificationButton;
 
 public class MainActivity extends AppCompatActivity {
-    private NotificationButton button;
+    private NotificationButton button, button2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        button = (NotificationButton) findViewById(R.id.button);
-        button.setNotificationNumber(101);
+        button2 = (NotificationButton) findViewById(R.id.button2);
+        button2.setNotificationNumber(120);
     }
 
     @Override
