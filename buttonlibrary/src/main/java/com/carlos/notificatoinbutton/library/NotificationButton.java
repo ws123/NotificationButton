@@ -57,6 +57,7 @@ public class NotificationButton extends Button {
     }
 
     private void drawRedCircle(Canvas canvas) {
+        if (notificationNumber <= 0) return;
         paint.setColor(circleColor);
         if (rectF == null || isChange) {
             if (notificationNumber < 10) {
@@ -67,7 +68,7 @@ public class NotificationButton extends Button {
                 rectF = new RectF(getWidth() - redCircleSize * 4, 0, getWidth(), redCircleSize * 2);
             }
         }
-        canvas.drawRoundRect(rectF, redCircleSize * 2, redCircleSize * 2, paint);
+        canvas.drawRoundRect(rectF, redCircleSize, redCircleSize, paint);
         paint.setColor(textColor);
         paint.setTextSize(redCircleSize * 3 / 2);
         paint.setTextAlign(Paint.Align.CENTER);
@@ -85,5 +86,6 @@ public class NotificationButton extends Button {
             isChange = true;
         }
         this.notificationNumber = notificationNumber;
+        invalidate();
     }
 }

@@ -27,6 +27,12 @@ public class MainActivity extends AppCompatActivity {
         button3.setNotificationNumber(85);
         button4.setNotificationNumber(9);
         button5.setNotificationNumber(0);
+        button5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                button5.setNotificationNumber(88);
+            }
+        });
     }
 
     @Override
